@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_ll67ABGYEeW7xqkBzIjHqw" targetNamespace="http://camunda.org/schema/1.0/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:message id="userRegistered" name="userRegistered" />
+  <bpmn2:process id="registration" name="registration" isExecutable="true">
+    <bpmn2:extensionElements>
+      <camunda:executionListener class="com.unitedtraders.camunda.process.RegistrationProcessStartListener" event="start" />
+    </bpmn2:extensionElements>
+    <bpmn2:startEvent id="StartEvent_1" name="regitration event">
+      <bpmn2:extensionElements>
+        <camunda:properties>
+          <camunda:property />
+        </camunda:properties>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>SequenceFlow_0zsu42d</bpmn2:outgoing>
+      <bpmn2:messageEventDefinition messageRef="userRegistered" />
+    </bpmn2:startEvent>
+    <bpmn2:serviceTask id="AddToMailchimp" name="add to mailchimp list &#34;demo&#34;" camunda:delegateExpression="#{registrationProcessService.addUserToList(&#34;defaultDemoTemplate&#34;, userEmail)}">
+      <bpmn2:incoming>SequenceFlow_10e2xi3</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_06e5n19</bpmn2:outgoing>
+    </bpmn2:serviceTask>
+    <bpmn2:endEvent id="EndEvent_171jlys">
+      <bpmn2:incoming>SequenceFlow_06e5n19</bpmn2:incoming>
+      <bpmn2:incoming>SequenceFlow_084wjwn</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_0zsu42d" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_1q6t1l1" />
+    <bpmn2:sequenceFlow id="SequenceFlow_06e5n19" sourceRef="AddToMailchimp" targetRef="EndEvent_171jlys" />
+    <bpmn2:exclusiveGateway id="ExclusiveGateway_1q6t1l1">
+      <bpmn2:incoming>SequenceFlow_0zsu42d</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_10e2xi3</bpmn2:outgoing>
+      <bpmn2:outgoing>SequenceFlow_084wjwn</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:sequenceFlow id="SequenceFlow_10e2xi3" name="demoRegistration&#10;&#10;" sourceRef="ExclusiveGateway_1q6t1l1" targetRef="AddToMailchimp">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[${userRegistrationTemplate == "defaultDemoTemplate"}]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="SequenceFlow_084wjwn" sourceRef="ExclusiveGateway_1q6t1l1" targetRef="EndEvent_171jlys" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration">
+      <bpmndi:BPMNShape id="StartEvent_0aya2nc_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="65" y="97" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="43" y="76" width="79" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_033rbv8_di" bpmnElement="AddToMailchimp">
+        <dc:Bounds x="395" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_171jlys_di" bpmnElement="EndEvent_171jlys">
+        <dc:Bounds x="622" y="97" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="136" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0zsu42d_di" bpmnElement="SequenceFlow_0zsu42d">
+        <di:waypoint xsi:type="dc:Point" x="101" y="115" />
+        <di:waypoint xsi:type="dc:Point" x="199" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="105" y="93.5" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06e5n19_di" bpmnElement="SequenceFlow_06e5n19">
+        <di:waypoint xsi:type="dc:Point" x="495" y="115" />
+        <di:waypoint xsi:type="dc:Point" x="622" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="513.5" y="93.5" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1q6t1l1_di" bpmnElement="ExclusiveGateway_1q6t1l1" isMarkerVisible="true">
+        <dc:Bounds x="199" y="90" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="224" y="143" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_10e2xi3_di" bpmnElement="SequenceFlow_10e2xi3">
+        <di:waypoint xsi:type="dc:Point" x="249" y="115" />
+        <di:waypoint xsi:type="dc:Point" x="395" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="274" y="96" width="87" height="38" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_084wjwn_di" bpmnElement="SequenceFlow_084wjwn">
+        <di:waypoint xsi:type="dc:Point" x="224" y="140" />
+        <di:waypoint xsi:type="dc:Point" x="224" y="257" />
+        <di:waypoint xsi:type="dc:Point" x="640" y="257" />
+        <di:waypoint xsi:type="dc:Point" x="640" y="133" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="432" y="235.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
